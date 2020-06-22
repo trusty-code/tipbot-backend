@@ -1,0 +1,23 @@
+[
+    {
+        "type": "website",
+        "name": "einfachIOTA.de",
+        "url": "https://www.einfachIOTA.de",
+        "description": "IOTA einfach erklärt.",
+        "donation_address": "VO9H9GFNRTOLPUHM9MACFWSUFLNLDYCTKIPXCYLTNNNDMURPUIXNVBYQMRKOJDEYM9UDESGXBIWASIDRBFOBHCJGZD"
+    },
+    {
+        "type": "website",
+        "name": "Deposy",
+        "url": "https://www.deposy.org",
+        "description": "Redefining Plastic Waste With a Smart Deposit System.",
+        "donation_address": "TNBQEN9YRWTKBNXLFAOWTUFE9RFNLRORSWROIUFI9AXDWWHFZXUDXKXUOXQWJFUYGQDUOCLBFFDICVRIWJWKMFXSGC"
+    },
+    {
+        "type": "website",
+        "name": "TangleBay",
+        "url": "https://www.tanglebay.org",
+        "description": "Your Portal to the Tangle.",
+        "donation_address": "KKEMSVOKRVEOARTKSYFM9ZNFEDDQUFGTFATYGRF9RXKBJGTUMGMDVPSLSZF9TRQXSASYAFTFEUNCQCHZYTDOQAUGDW"
+    }
+]
