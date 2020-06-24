@@ -14,7 +14,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             // Enable the logger.
             .wrap(middleware::Logger::default())
-            .service(web::resource("/qr/{address}").route(web::get().to(get_qrcodes)))
+            .service(web::resource("/qr/{address}").route(web::get().to(handle_qrcode)))
             // We allow the visitor to see an index of the images at `/images`.
             .service(Files::new("/qr", "qr/").show_files_listing())
             // Serve a tree of static files at the web root and specify the index file.
