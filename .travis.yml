@@ -1,0 +1,23 @@
+# verified on https://config.travis-ci.com/explore
+language: rust
+os: linux
+dist: xenial
+cache: cargo
+jobs:
+  include:
+  - rust: stable
+script:
+- cargo build --release
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install -y rsync
+  - openssl aes-256-cbc -K $encrypted_2daae1db491d_key -iv $encrypted_2daae1db491d_iv -in .travis/trustify.enc -out .travis/trustify -d
+deploy:
+  provider: script
+  script: .travis/deploy.sh
+  skip_cleanup: true
+  on:
+    all_branches: true
+    condition: $TRAVIS_BRANCH =~ ^(master|production)$
+#after_success:
+#  - ./.travis/deploy.sh

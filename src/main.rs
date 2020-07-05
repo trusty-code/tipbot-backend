@@ -4,13 +4,18 @@ use actix_web::{middleware, App, HttpServer, web};
 pub mod controllers;
 
 use crate::controllers::qrcodes::*;
+use std::env;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "actix_web=info");
     env_logger::init();
 
-    HttpServer::new(|| {
+    let host = env::var("HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
+    let port = env::var("PORT").unwrap_or_else(|_| "3000".to_string());
+
+
+    let server= HttpServer::new(|| {
         App::new()
             // Enable the logger.
             .wrap(middleware::Logger::default())
@@ -23,7 +28,8 @@ async fn main() -> std::io::Result<()> {
             // path then the service for the static images would never be reached.
             .service(Files::new("/", "./static/").index_file("index.html"))
     })
-    .bind("127.0.0.1:3000")?
-    .run()
-    .await
+    .bind(format!("{}:{}", host, port))?
+    .run();
+    println!("Tipbot backend listening on http://{}:{}",host, port);
+    server.await
 }
