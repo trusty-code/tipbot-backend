@@ -1,0 +1,17 @@
+[Unit]
+Description=tipbot backend compiled on master branch
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=trustify-www
+Environment=RUST_LOG=debug
+Environment=PORT=3000
+WorkingDirectory=/home/trustify-www/master/
+ExecStart=/home/trustify-www/master/tipbot-backend
+
+[Install]
+WantedBy=multi-user.target
