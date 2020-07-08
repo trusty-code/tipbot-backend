@@ -1,24 +1,33 @@
 use actix_files::Files;
-use actix_web::{middleware, App, HttpServer, web};
+use actix_web::{middleware::Logger, App, HttpServer, web};
 
 pub mod controllers;
+mod handlers;
+
+use handlers::app_config;
 
 use crate::controllers::qrcodes::*;
-use std::env;
+
+mod config;
+use crate::config::Config;
+use color_eyre::Result;
+use tracing::info;
 
 #[actix_rt::main]
-async fn main() -> std::io::Result<()> {
-    std::env::set_var("RUST_LOG", "actix_web=info");
-    env_logger::init();
+async fn main() -> Result<()> {
+    // std::env::set_var("RUST_LOG", "actix_web=info");
+    // env_logger::init();
 
-    let host = env::var("HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
-    let port = env::var("PORT").unwrap_or_else(|_| "3000".to_string());
+    let config = Config::from_env()
+        .expect("Server configuration");
+    
+    info!("Tipbot backend listening on http://{}:{}", config.host, config.port);
 
-
-    let server= HttpServer::new(|| {
+    HttpServer::new(|| {
         App::new()
             // Enable the logger.
-            .wrap(middleware::Logger::default())
+            .wrap(Logger::default())
+            .configure(app_config)
             .service(web::resource("/qr/{address}").route(web::get().to(handle_qrcode)))
             // We allow the visitor to see an index of the images at `/images`.
             .service(Files::new("/qr", "qr/").show_files_listing())
@@ -28,8 +37,9 @@ async fn main() -> std::io::Result<()> {
             // path then the service for the static images would never be reached.
             .service(Files::new("/", "./static/").index_file("index.html"))
     })
-    .bind(format!("{}:{}", host, port))?
-    .run();
-    println!("Tipbot backend listening on http://{}:{}",host, port);
-    server.await
+    .bind(format!("{}:{}", config.host, config.port))?
+    .run()
+    .await?;
+
+    Ok(())
 }
